@@ -1,1 +1,1 @@
-"# Skyfler.github.io"
+Игра сапер в стиле Window XP.
