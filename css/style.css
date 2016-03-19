@@ -1,0 +1,130 @@
+[data-content="minerContainer"] {
+	background-color: #ccc;
+	border-width: 1px;
+	border-style: solid;
+	border-color: white gray gray white;
+	padding: 0 10px 10px;
+	display: inline-block;
+	position: relative;
+}
+
+[data-content="field"] {
+	margin-top: 10px;
+	background-color: #000;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray white white gray;
+	border-spacing: 1px;
+	text-align: center;
+	font: bold 16px Arial;
+}
+
+[data-content="field"] td {
+	background-color: #ccc;
+	border-width: 1px;
+	border-style: solid;
+	border-color: white gray gray white;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	background-size: 100%;
+}
+
+[data-content="mine"] {
+	background-image: url("../img/mine.png");
+}
+
+[data-content="flag"] {
+	background-image: url("../img/Flag_icon_red_4.svg");
+}
+
+[data-content="wrong"] {
+	background-image: url("../img/wrong.png");
+}
+
+[data-action="restart"] {
+	background-color: #ccc;
+	position: absolute;
+	left: calc(50% - 15px);
+	top: 39px;
+	background-image: url("../img/smile.png");
+	border-width: 1px;
+	/* border-style: solid; */
+	/* border-color: white gray gray white; */
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	background-size: 100%;
+}
+
+[data-content="lost"] {
+	background-image: url("../img/dead.png");
+}
+
+[data-content="win"] {
+	background-image: url("../img/win.png");
+}
+
+[data-content="mineCounter"] {
+	display: inline-block;
+	text-align: right;
+	width: 60px;
+	background: black;
+	color: red;
+	font: 32px 'Trebuchet MS';
+}
+
+ul,li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.topbar {
+	background: #ccc;
+	margin: 0 -10px 10px;
+		border-width: 1px;
+	border-style: solid;
+	border-color: gray white white gray;
+}
+
+.topbar .menu {
+	position: relative;
+}
+
+.topbar .menu>li {
+	display: inline-block;
+}
+
+.topbar .menu li {
+	cursor: pointer;
+	padding: 2px 10px;
+}
+
+.topbar .menu .dropdown li {
+	position: relative;
+	padding-left: 27px;
+}
+
+.topbar .menu li.selected:before {
+	content: "✓";
+	left: 7px;
+	position: absolute;
+}
+
+.topbar .menu li:hover {
+	background: #c7f1ff;
+}
+
+.topbar .dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: white;
+	z-index: 1;
+}
+
+.topbar .menu>li:hover .dropdown {
+	display: block;
+}
