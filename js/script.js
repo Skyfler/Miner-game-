@@ -162,6 +162,17 @@ function openAllAroud(row, col, minesNum) {
 function menuAction(target) {
 	var action = target.dataset.action;
 	if (action) {
+		
+		if (action == 'tip') {
+				alert('П О Д С К А З К А:\n\n'+
+				'Правая кнопка мыши: открывает ячейку.\n'+
+				'Левая кнопка мыши: ставит/убирает флаг.\n'+
+				'Правая+левая кнопки мыши: открывают все безопасные ячейки вокруг выбранной,\n'+
+				'если цифра в ней совпадает с колличеством флагов вокруг.\n\n'+
+				'Для победы надо открыть все безопасные ячейки (флаги ставить не обязательно).');
+				return;
+		}
+		
 		selectedDif.classList.remove('selected');
 		target.classList.add('selected');
 		selectedDif = target;
@@ -348,11 +359,16 @@ function createMenu() {
 	menu.appendChild(listItem);
 	listItem.appendChild(dropdownMenu);
 	
+	listItem = listItem.cloneNode(false);
+	listItem.innerHTML = 'Подсказака';
+	menu.appendChild(listItem);
+	
 	for (var i = 0; i < 4; i++) {
 		listItem = listItem.cloneNode(false);
 		dropdownMenu.appendChild(listItem);
 	}
 	
+	menu.children[1].dataset.action = 'tip';
 	selectedDif = dropdownMenu.children[0];
 	dropdownMenu.children[0].classList.add('selected');
 	dropdownMenu.children[0].innerHTML = 'Новичок';
