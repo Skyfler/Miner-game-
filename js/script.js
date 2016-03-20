@@ -314,10 +314,11 @@ function createFieldMatrix() {
 и посчитывающая числа в ячейках вокруг мин*/
 function randomizeMines() {
 	for (var i = 0; i < minesCount; i++) {
-		while ((!row)||(!col)||(fieldMatrix[row][col] == 'mine')) {
+		while ((isNaN(row))||(isNaN(col))||(fieldMatrix[row][col] == 'mine')) {
 			var row = getRandomInt(0, fieldRows - 1);
 			var col = getRandomInt(0, fieldCols - 1);
 		}
+		
 		fieldMatrix[row][col] = 'mine';
 		for (var j = row - 1; j < row + 2; j++) {
 			for (var k = col -1; k < col + 2; k++) {
@@ -327,6 +328,7 @@ function randomizeMines() {
 				fieldMatrix[j][k] += 1;
 			}
 		}
+
 	}
 }
 
