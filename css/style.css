@@ -30,15 +30,20 @@
 	background-size: 100%;
 }
 
-[data-content="mine"] {
+[data-content="field"] [data-content="opened"] {
+	border-color: #e4e3e3;
+	background-color: #e4e3e3;
+}
+
+[data-content="field"] [data-content="mine"] {
 	background-image: url("../img/mine.png");
 }
 
-[data-content="flag"] {
+[data-content="field"] [data-content="flag"] {
 	background-image: url("../img/Flag_icon_red_4.svg");
 }
 
-[data-content="wrong"] {
+[data-content="field"] [data-content="wrong"] {
 	background-image: url("../img/wrong.png");
 }
 

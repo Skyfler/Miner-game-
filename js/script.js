@@ -11,18 +11,61 @@ var restartBtn;
 var mineCounter;
 var topBar;
 var selectedDif;
+var mouseRightDown = false;
+var mouseLeftDown = false;
+var mouseDoubleDown = false;
 
 miner();
+
+/*Функция, отмечающая, какая клавиша мыши нажата в данный момент,
+и проверяющая, нажаты ли обе одновременно*/
+function mouseDownTrue(e) {
+	
+	if (e.which == 1) {
+		mouseLeftDown = true;
+	}
+	
+	if (e.which == 3) {
+		mouseRightDown = true;
+	}
+	
+	if (mouseLeftDown && mouseRightDown) {
+		mouseDoubleDown = true;
+	}
+
+}
+
+/*Функция, отмечающая, какая клавиша мыши была отпущена,
+и, если до этого были нажаты обе клавиши, запускающая соответствующую функцию*/
+function mouseDownFalse(e) {
+	
+	if (e.which == 1) {
+		mouseLeftDown = false;
+	}
+	
+	if (e.which == 3) {
+		mouseRightDown = false;
+	}
+	
+	if ((e.target.tagName == 'TD')&&(e.target.dataset.content == 'opened')&&mouseDoubleDown) {
+		var col = e.target.cellIndex;
+		var row = e.target.parentElement.rowIndex;
+		openAllAroud(row, col, e.target.innerHTML);
+		mouseDoubleDown = false;
+	}
+	
+}
 
 /*Функция, устанавливающая/убирающая флаг по правому клику на клетку поля,
 и изменяющая цифру на счетчике мин*/
 function setFlag(e) {
 	
+	e.preventDefault();
+	
 	if ((e.target.tagName != 'TD')||(e.target.dataset.content == 'mine')||(e.target.dataset.content == 'opened')||(gameEnd)) {
-		e.preventDefault();
 		return;
 	}
-
+	
 	if (e.target.dataset.content != 'flag') {
 		e.target.dataset.content = 'flag';
 		mineCounter.innerHTML = parseInt(mineCounter.innerHTML) - 1;
@@ -30,7 +73,7 @@ function setFlag(e) {
 		e.target.dataset.content = '';
 		mineCounter.innerHTML = parseInt(mineCounter.innerHTML) + 1;
 	}
-	e.preventDefault();
+	
 }
 
 /*Функция, отлавливающая левый клик на элементах контейнера fieldContainer и запускающая соответствующее действие*/
@@ -55,12 +98,63 @@ function pushBtn(e) {
 	
 	openCell(row, col);
 	
+	isGameEnd();
+}
+
+
+/*Функция, проверяющая условия победы и поражения*/
+function isGameEnd() {
+	
 	if (gameEnd == 'lost') {
 		gameOver();
 		return;
 	}
 	
 	isWin();
+}
+
+/*Функция, открывающая предположительно безопасные клетки вокруг выбранной, 
+если кол-во мин указанное в ней совпадает с кол-вом флагов вокруг нее*/
+function openAllAroud(row, col, minesNum) {
+	
+	if (!minesNum) {
+		return;
+	}
+	
+	var flagsNum = 0;
+	var wrongFlags = false;
+	
+	for (var i = row - 1; i < row + 2; i++) {
+		for (var j = col -1; j < col + 2; j++) {
+			if ((i < 0)||(j < 0)||(i > fieldRows - 1)||(j > fieldCols - 1)||(field.rows[i].cells[j].dataset.content != 'flag')) {
+				continue;
+			}
+			flagsNum++;
+		}
+	}
+	
+	if (minesNum != flagsNum) {
+		return;
+	}
+	
+	
+	for (var i = row - 1; i < row + 2; i++) {
+		for (var j = col -1; j < col + 2; j++) {
+			if ((i < 0)||(j < 0)||(i > fieldRows - 1)||(j > fieldCols - 1)||(field.rows[i].cells[j].dataset.content == 'flag')||(field.rows[i].cells[j].dataset.content == 'opened')) {
+				continue;
+			}
+			openCell(i, j);
+			if (gameEnd) {
+				wrongFlags = gameEnd;
+				gameEnd = false;
+				
+			}
+		}
+	}
+
+	gameEnd = wrongFlags;
+	
+	isGameEnd();
 }
 
 /*Функция, выполняющая смену сложности при клике на пункт выпадающего меню
@@ -156,15 +250,13 @@ function openCell(row, col) {
 		field.rows[row].cells[col].dataset.content = 'mine';	
 	} else {
 		field.rows[row].cells[col].dataset.content = 'opened';
-		field.rows[row].cells[col].style.borderColor = '#e4e3e3';
-		field.rows[row].cells[col].style.backgroundColor = '#e4e3e3';
 		if (fieldMatrix[row][col] == '0') {
 			for (var i = row - 1; i < row + 2; i++) {
 				for (var j = col -1; j < col + 2; j++) {
-				if ((i < 0)||(j < 0)||(i > fieldRows - 1)||(j > fieldCols - 1)||(field.rows[i].cells[j].dataset.content == 'opened')||(field.rows[i].cells[j].dataset.content == 'flag')) {
-					continue;
-				}
-				openCell(i, j);
+					if ((i < 0)||(j < 0)||(i > fieldRows - 1)||(j > fieldCols - 1)||(field.rows[i].cells[j].dataset.content == 'opened')||(field.rows[i].cells[j].dataset.content == 'flag')) {
+						continue;
+					}
+					openCell(i, j);
 				}
 			}
 		} else {
@@ -292,6 +384,8 @@ function miner() {
 	
 	fieldContainer.addEventListener('click', pushBtn);
 	fieldContainer.addEventListener('contextmenu', setFlag);
+	fieldContainer.addEventListener('mousedown', mouseDownTrue);
+	fieldContainer.addEventListener('mouseup', mouseDownFalse);
 }
 
 /*Функция, обновляющая игровые переменные и запускающая игру*/
