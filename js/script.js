@@ -47,7 +47,7 @@ function mouseDownFalse(e) {
 		mouseRightDown = false;
 	}
 	
-	if ((e.target.tagName == 'TD')&&(e.target.dataset.content == 'opened')&&mouseDoubleDown) {
+	if ((e.target.tagName == 'TD')&&(e.target.dataset.content == 'opened')&&mouseDoubleDown&&!gameEnd) {
 		var col = e.target.cellIndex;
 		var row = e.target.parentElement.rowIndex;
 		openAllAroud(row, col, e.target.innerHTML);
@@ -62,7 +62,7 @@ function setFlag(e) {
 	
 	e.preventDefault();
 	
-	if ((e.target.tagName != 'TD')||(e.target.dataset.content == 'mine')||(e.target.dataset.content == 'opened')||(gameEnd)) {
+	if ((e.target.tagName != 'TD')||(e.target.dataset.content == 'opened')||(gameEnd)) {
 		return;
 	}
 	
@@ -89,7 +89,7 @@ function pushBtn(e) {
 		return;
 	}
 	
-	if ((e.target.tagName != 'TD')||(e.target.dataset.content == 'flag')||(gameEnd)) {
+	if ((e.target.tagName != 'TD')||(e.target.dataset.content == 'flag')||(e.target.dataset.content == 'opened')||(gameEnd)) {
 		return;
 	}
 	
@@ -168,7 +168,7 @@ function menuAction(target) {
 				'Правая кнопка мыши: открывает ячейку.\n'+
 				'Левая кнопка мыши: ставит/убирает флаг.\n'+
 				'Правая+левая кнопки мыши: открывают все безопасные ячейки вокруг выбранной,\n'+
-				'если цифра в ней совпадает с колличеством флагов вокруг.\n\n'+
+				'если цифра в ней совпадает с количеством флагов вокруг.\n\n'+
 				'Для победы надо открыть все безопасные ячейки (флаги ставить не обязательно).');
 				return;
 		}
